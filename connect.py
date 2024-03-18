@@ -7,7 +7,7 @@ cursor.execute(sql)
 results = cursor.fetchall()
 
 for name in results:
-    if name[1] != None:
+    if name[1] is not None:
         print(name[1])
 
 db.close()
