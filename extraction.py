@@ -9,27 +9,12 @@ html = htmlFILE.read()
 
 soup = BeautifulSoup(html, "html.parser")
 
-data = soup.find_all("table", class_="wikitable sitecolor-s sortable mw-collapsible mw-collapsed")
+data = soup.find_all("table", {'class': 'wikitable sitecolor-s2 sortable mw-collapsible mw-collapsed'})
 data_table = []
 data_table = data[0].text.split("\n")
 str_list = list(filter(None, data_table))
-del str_list[:8]
 
-# <th>Weapon series
-# </th>
-# <th>Range
-# </th>
-# <th>Damage
-# </th>
-# <th>Fire rate (f)
-# </th>
-# <th>Time to splat (sec)
-# </th>
-# <th>Ink usage (%)
-# </th>
-# <th>Mobility (DU/f)
-# </th>
-# <th>Paint rate (p/sec)
+del str_list[:7]
 data_table = []
 counter = 0
 for i in str_list:
@@ -47,20 +32,16 @@ for i in str_list:
             Fire_rate = i
             counter += 1
         case 4:
-            Time_to_splat = i
-            counter += 1
-        case 5:
             Ink_usage = i
             counter += 1
-        case 6:
+        case 5:
             Mobility = i
             counter += 1
-        case 7:
+        case 6:
             Paint_rate = i
-            data_table.append([name, Range, Damage, Fire_rate, Time_to_splat, Ink_usage, Mobility, Paint_rate])
+            data_table.append([name, Range, Damage, Fire_rate, Ink_usage, Mobility, Paint_rate])
             counter = 0
 print(data_table)
-
 db = sqlite3.connect("splatoon3.db")
 cursor = db.cursor()
 for weapons in data_table:
