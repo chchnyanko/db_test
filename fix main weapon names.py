@@ -1,7 +1,6 @@
 import sqlite3
 
 
-
 db = sqlite3.connect("splatoon3.db")
 cursor = db.cursor()
 cursor.execute("SELECT MainWeaponName FROM MainWeapon;")

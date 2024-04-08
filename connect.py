@@ -24,23 +24,27 @@ def check_id(results: list, id: str):
 def connect(query):
     db = sqlite3.connect("splatoon3.db")
     cursor = db.cursor()
-    cursor.execute(query)
-    results = cursor.fetchall()
-    if is_id:
-        check_id(results, is_id)
-    else:
-        print_result(results)
-    db.close()
-    return results
+    try:
+        cursor.execute(query)
+        results = cursor.fetchall()
+        if is_id:
+            check_id(results, is_id)
+        else:
+            print_result(results)
+        db.close()
+        return results
+    except Exception as e:
+        print(e, "fail ore")
 
 
 def print_result(results):
     print(is_id)
     for i in results:
         if i is not None:
-            if type(i) == tuple:
+            if type(i) is tuple:
                 i = i[0]
             print(i)
+
 
 
 target = input("What are you looking for ")
@@ -52,4 +56,3 @@ if target.lower().find("id") != -1:
 if limit:
     filter = (f" WHERE {limit}")
 connect(f"SELECT {target} FROM {table}{filter}")
-
