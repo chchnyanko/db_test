@@ -4,12 +4,21 @@ import sqlite3
 is_id = ""
 
 
-def check_id(id: str):
-    print(id)
+def check_id(results: list, id: str):
     target_id = id.replace("ID", "Name")
     id_table = id.replace("ID", "")
-    print(f"SELECT {target_id} FROM {id_table};")
-    connect(f"SELECT {target_id} FROM {id_table};")
+    db = sqlite3.connect("splatoon3.db")
+    cursor = db.cursor()
+    query = (f"SELECT {target_id} FROM {id_table}")
+    cursor.execute(query)
+    query_results = cursor.fetchall()
+    new_list = []
+    for i in results:
+        if i[0]:
+            new_list.append(query_results[int(i[0]) - 1])
+        else:
+            new_list.append("")
+    print_result(new_list)
 
 
 def connect(query):
@@ -17,7 +26,10 @@ def connect(query):
     cursor = db.cursor()
     cursor.execute(query)
     results = cursor.fetchall()
-    print_result(results)
+    if is_id:
+        check_id(results, is_id)
+    else:
+        print_result(results)
     db.close()
     return results
 
@@ -39,8 +51,5 @@ if target.lower().find("id") != -1:
     is_id = target
 if limit:
     filter = (f" WHERE {limit}")
-if is_id:
-    check_id(is_id)
-else:
-    connect(f"SELECT {target} FROM {table}{filter}")
+connect(f"SELECT {target} FROM {table}{filter}")
 
